@@ -6,27 +6,6 @@ export default class AuthService {
     return response;
   }
 
-  checkAutoLogin = async (account: string, condition: boolean) => {
-    const token = condition ? localStorage.getItem("token") : "";
-  
-    const { data: response } = await axios.post(`auth/login`,
-      {
-        playerName: "",
-        playerTexture: "",
-        walletAddress: account,
-        signature: "",
-        message: "",
-        token,
-      }
-    );
-  
-    if (response.status) {
-      this.saveTokenInLocalStorage(response.data.token);
-    } else {
-      this.saveTokenInLocalStorage("");
-    }
-  }
-
   saveTokenInLocalStorage = (token: string) => {
     localStorage.setItem("token", token);
   }
@@ -36,10 +15,6 @@ export default class AuthService {
   }
 
   removeTokenInLocalStorage = () => {
-    console.log("signout");
     localStorage.removeItem("token");
-    setTimeout(() => {
-      window.location.reload();
-    });
   }
 }

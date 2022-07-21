@@ -3,6 +3,7 @@ import type { ColumnsType } from 'antd/es/table';
 import { useContext, useEffect, useState } from "react";
 import { context } from "../../App";
 import NewsService from "../../services/NewsService";
+import FormModal from "./FormModal";
 import { Category, Item, Pagination } from "./Model";
 import "./News.scss"
 
@@ -25,29 +26,46 @@ export default function ListNews() {
     },
     {
       title: 'Image',
-      dataIndex: 'image',
-      key: 'image',
-      render: (_, { image }: Item) => (
-        <img src={image} width={80} height={80}/>
+      dataIndex: 'image_url',
+      key: 'image_url',
+      render: (_, item: Item) => (
+        <Space size="middle">
+          {item.image_url && <img src={item.image_url} width={80} height={80}/>}
+        </Space>
       ),
     },
     {
       title: 'Video Url',
-      dataIndex: 'video',
-      key: 'video',
+      dataIndex: 'video_url',
+      key: 'video_url',
+      render: (_, item: Item) => (
+        <Space size="middle">
+          {item.video_url && <a href={item.video_url}>Link</a>}
+        </Space>
+      ),
     },
     {
       title: 'Short Description',
-      dataIndex: 'shortDescription',
-      key: 'shortDescription',
+      dataIndex: 'short_description',
+      key: 'short_description',
+    },
+    {
+      title: 'External Link',
+      dataIndex: 'external_url',
+      key: 'external_url',
+      render: (_, item: Item) => (
+        <Space size="middle">
+          {item.external_url && <a href={item.external_url}>Link</a>}
+        </Space>
+      ),
     },
     {
       title: 'Action',
       key: 'action',
       render: (_, item: Item) => (
         <Space size="middle">
-          <a href="javascript:void(0)" onClick={() => openFormDialog(item)}>Edit</a>
-          <a href="javascript:void(0)" onClick={() => openConfirmDeleteDialog(item)}>Delete</a>
+          <a href="#!" onClick={() => openFormDialog(item)}>Edit</a>
+          <a href="#!" onClick={() => openConfirmDeleteDialog(item)}>Delete</a>
         </Space>
       ),
     },
@@ -59,15 +77,7 @@ export default function ListNews() {
     const res = await service.getItemsByCategory(categoryId, pagination.pageIndex, pagination.pageSize)
     setFullItems(res.data.data ?? [])
     setPagination({...pagination, totalRecords: res.data.total_records})
-    const items = res.data.data?.map((item: any) => ({
-      key: item.item_id,
-      title: item.title,
-      image: item.image_url,
-      video: item.video_url,
-      shortDescription: item.short_description,
-      description: item.description
-    })) ?? []
-    setItems(items)
+    setItems(res.data.data ?? [])
     setLoading(false)
   }
 
@@ -109,10 +119,6 @@ export default function ListNews() {
     setOpenForm(false)
   }
 
-  const submitForm = () => {
-      console.log(selectedItem)
-  }
-
   const openConfirmDeleteDialog = (item: Item) => {
     setSelectedItem(item)
     setOpenConfirmDelete(true)
@@ -128,7 +134,7 @@ export default function ListNews() {
       setLoading(true)
       setOpenConfirmDelete(false)
       const service = new NewsService()
-      const {item_id, ...deletedItem} = fullItems.filter((item: any) => item.item_id == selectedItem.key)[0]
+      const {key, ...deletedItem} = fullItems.filter((item: any) => item.key == selectedItem.key)[0]
       await service.deleteItem({category_id: selectedCategory, item: deletedItem})
       if(pagination.pageIndex == 1){
         await getItemsByCategory(selectedCategory)
@@ -160,9 +166,15 @@ export default function ListNews() {
          <Modal title="Confirm" visible={openConfirmDelete} onOk={deleteItem} onCancel={cancelConfirmDeleteDialog}>
             <p>Are you sure you want to delete?</p>
         </Modal>
-        <Modal title="Edit Form" visible={openForm} onOk={() => submitForm()} onCancel={cancelFormDialog}>
-            <p>Edit</p>
-        </Modal>
+        <FormModal 
+           categories={categories} 
+           selectedCategory={selectedCategory} 
+           data={selectedItem} 
+           openForm={openForm} 
+           cancelFormDialog={cancelFormDialog} 
+           reloadList={(cat: string) => getItemsByCategory(cat)}
+           setSelectedCategory={(cat: string) => setSelectedCategory(cat)}
+           />
     </div>
   );
 }

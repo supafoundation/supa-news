@@ -6,7 +6,8 @@ import { providerOptions } from "../../providerOptions";
 import { Button } from 'antd';
 import "./Login.scss"
 import { useNavigate } from "react-router-dom";
-import { truncateAddress } from "../ultils/Address";
+import { useAuth } from "./AuthProvider";
+import { truncateAddress } from "../../ultils/Address";
 
 const web3Modal = new Web3Modal({
   cacheProvider: true, // optional
@@ -18,21 +19,15 @@ export default function Login() {
   const [provider, setProvider] = useState<any>();
   const [library, setLibrary] = useState<any>();
   const [account, setAccount] = useState<string>();
+  const auth = useAuth();
 
   const connectWallet = async () => {
-    const service = new AuthService()
-    const token = service.getTokenInLocalStorage()
-    console.log(token)
-    if(!token){
-      const provider = await web3Modal.connect();
-      const library = new ethers.providers.Web3Provider(provider);
-      const accounts = await library.listAccounts();
-      setProvider(provider);
-      setLibrary(library);
-      if (accounts) setAccount(accounts[0]);
-    }else{
-      navigate("/news")
-    }
+    const provider = await web3Modal.connect();
+    const library = new ethers.providers.Web3Provider(provider);
+    const accounts = await library.listAccounts();
+    setProvider(provider);
+    setLibrary(library);
+    if (accounts) setAccount(accounts[0]);
   };
 
   const login = async () => {
@@ -52,11 +47,16 @@ export default function Login() {
     const res = await service.login(data)
     if(res.code == 200){
       service.saveTokenInLocalStorage(res.data.token)
-      navigate("/news")
+      auth.signin(res.data.token, () => {
+        navigate("/news")
+      });
     }
   };
 
   useEffect(() => {
+    auth.checkToken(() => {
+      navigate("/news")
+    })
     if (web3Modal.cachedProvider) {
       connectWallet();
     }

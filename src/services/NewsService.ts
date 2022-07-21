@@ -1,5 +1,5 @@
 import axios from "axios";
-import { DeleteItemRequest } from "../components/news/Model";
+import { CreateItemRequest, DeleteItemRequest, UpdateItemRequest } from "../components/news/Model";
 
 export default class NewsService {
   getAllCategories = async () => {
@@ -14,6 +14,16 @@ export default class NewsService {
 
   deleteItem = async (params: DeleteItemRequest) => {
     const { data: response } = await axios.delete(`categories/items`, {data: params});
+    return response;
+  }
+
+  createItem = async (data: CreateItemRequest) => {
+    const { data: response } = await axios.post(`categories/items`, data);
+    return response;
+  }
+
+  updateItem = async (data: UpdateItemRequest) => {
+    const { data: response } = await axios.put(`categories/items`, data);
     return response;
   }
 }
