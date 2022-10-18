@@ -93,7 +93,6 @@ export default function ListNews() {
     if(res.data && res.data?.length > 0){
       setSelectedCategory(res.data[0].id)
     }
-    setLoading(false)
   }
 
   useEffect(() => {

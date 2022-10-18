@@ -64,7 +64,7 @@ export default function FormModal(props: FormModalProps) {
            onOk={() => form.submit()} 
            onCancel={closeForm}
            afterClose={closeForm}
-           width={"50%"}
+           width={"60%"}
         >
             <Form
                 form={form}
@@ -97,13 +97,25 @@ export default function FormModal(props: FormModalProps) {
                     name="short_description"
                     rules={[{ required: true, message: 'Short Description required' }]}
                 >
-                    <TextArea/>
+                    <TextArea rows={3}/>
                 </Form.Item>
                 <Form.Item
                     label="Description"
                     name="description"
                 >
-                    <TextArea />
+                    <TextArea rows={10}/>
+                </Form.Item>
+                <Form.Item
+                    label="Image URL"
+                    name="image_url"
+                >
+                    <Input/>
+                </Form.Item>
+                <Form.Item
+                    label="Video URL"
+                    name="video_url"
+                >
+                    <Input/>
                 </Form.Item>
                 <Form.Item
                     label="External URL"
@@ -138,18 +150,6 @@ export default function FormModal(props: FormModalProps) {
                 <Form.Item
                     label="Influencer ID"
                     name="influencer_id"
-                >
-                    <Input/>
-                </Form.Item>
-                <Form.Item
-                    label="Image URL"
-                    name="image_url"
-                >
-                    <Input/>
-                </Form.Item>
-                <Form.Item
-                    label="Video URL"
-                    name="video_url"
                 >
                     <Input/>
                 </Form.Item>
