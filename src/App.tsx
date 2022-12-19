@@ -8,6 +8,7 @@ import ListNews from "./components/news/ListNews";
 import React, { useState } from "react";
 import { Spin } from "antd";
 import AuthProvider, { RequireAuth } from "./components/auth/AuthProvider";
+import ListCategories from "./components/categories/ListCategories";
 
 interface GlobalData {
   setLoading: (status: boolean) => void
@@ -20,16 +21,17 @@ export default function App() {
 
   return (
     <AuthProvider>
-        <Spin spinning={isLoading} size="large" style={{marginTop: "30vh"}}>
-        <context.Provider value={{setLoading}}>
-        <BrowserRouter>
-          <Routes>
-              <Route path="/" element={<Navigate to="/login" replace/>}/>
-              <Route path="/login" element={<Login />}/>
-              <Route path="/news" element={<RequireAuth><ListNews /></RequireAuth>}/>
-          </Routes>
-        </BrowserRouter>
-      </context.Provider>
+        <Spin spinning={isLoading} size="large" style={{marginTop: "30vh", zIndex: 1000}}>
+          <context.Provider value={{setLoading}}>
+          <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Navigate to="/login" replace/>}/>
+                <Route path="/login" element={<Login />}/>
+                <Route path="/categories" element={<RequireAuth><ListCategories /></RequireAuth>}/>
+                <Route path="/news" element={<RequireAuth><ListNews /></RequireAuth>}/>
+            </Routes>
+          </BrowserRouter>
+        </context.Provider>
       </Spin>
     </AuthProvider>
   )

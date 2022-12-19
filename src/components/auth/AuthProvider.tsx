@@ -17,7 +17,7 @@ const AuthContext = React.createContext<AuthContextType>({
 });
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-  let [token, setToken] = useState<string | null>("");
+  let [token, setToken] = useState<string | null>(localStorage.getItem("token"));
 
   const signin = (token: string, callback: VoidFunction) => {
       const service = new AuthService()

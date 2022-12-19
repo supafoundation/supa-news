@@ -3,7 +3,8 @@ import TextArea from "antd/lib/input/TextArea";
 import { useContext, useEffect } from "react";
 import { context } from "../../App";
 import NewsService from "../../services/NewsService";
-import { Category, Item } from "./Model";
+import { Category } from "../categories/Model";
+import { Item } from "./Model";
 
 interface FormModalProps {
     categories: Category[];
@@ -16,14 +17,14 @@ interface FormModalProps {
 }
 
 export default function FormModal(props: FormModalProps) {
-    const {setLoading} = useContext(context)
-   const {categories, selectedCategory, data, openForm, cancelFormDialog, reloadList, setSelectedCategory} = props
+   const {setLoading} = useContext(context);
+   const {categories, selectedCategory, data, openForm, cancelFormDialog, reloadList, setSelectedCategory} = props;
    const [form] = Form.useForm();
 
    const onFinish = async (values: any) => {
-     setLoading(true)
-     const {category_id, key, ...data} = values
-     const service = new NewsService()
+     setLoading(true);
+     const {category_id, key, ...data} = values;
+     const service = new NewsService();
      if(key){
         await service.updateItem({
             category_id,
@@ -36,22 +37,21 @@ export default function FormModal(props: FormModalProps) {
             item: data
         })
      }
-     closeForm()
-     setSelectedCategory(category_id)
-     reloadList(category_id)
+     closeForm();
+     setSelectedCategory(category_id);
+     reloadList(category_id);
    };
 
    const closeForm = () => {
-    cancelFormDialog()
-    form.resetFields()
-    form.setFieldsValue({...data, category_id: selectedCategory})
+    cancelFormDialog();
+    form.resetFields();
    }
 
    useEffect(() => {
        if(data){
-         form.setFieldsValue({...data, category_id: selectedCategory})
+         form.setFieldsValue({...data, category_id: selectedCategory});
        }else{
-         form.setFieldsValue({category_id: categories.length > 0 ? categories[0].id : ""})
+         form.setFieldsValue({category_id: categories.length > 0 ? categories[0].id : ""});
        }
    }, [data])
 

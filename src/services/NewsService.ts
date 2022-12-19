@@ -2,10 +2,6 @@ import axios from "axios";
 import { CreateItemRequest, DeleteItemRequest, UpdateItemRequest } from "../components/news/Model";
 
 export default class NewsService {
-  getAllCategories = async () => {
-    const { data: response } = await axios.get(`categories`);
-    return response;
-  }
   
   getItemsByCategory = async (categoryId: string, pageIndex: number, pageSize: number) => {
     const { data: response } = await axios.get(`categories/items/bycategory?category_id=${categoryId}&page_index=${pageIndex}&page_size=${pageSize}`);

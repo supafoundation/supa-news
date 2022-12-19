@@ -14,11 +14,6 @@ export interface Item {
     timestamp: string;
 }
 
-export interface Category {
-    id: string;
-    nane: string;
-}
-
 export interface DeleteItemRequest {
     category_id: string;
     item: Item;

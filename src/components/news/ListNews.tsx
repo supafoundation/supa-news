@@ -2,9 +2,11 @@ import { Button, Modal, Select, Space, Table } from "antd";
 import type { ColumnsType } from 'antd/es/table';
 import { useContext, useEffect, useState } from "react";
 import { context } from "../../App";
+import CategoriesService from "../../services/CategoriesService";
 import NewsService from "../../services/NewsService";
+import { Category } from "../categories/Model";
 import FormModal from "./FormModal";
-import { Category, Item, Pagination } from "./Model";
+import { Item, Pagination } from "./Model";
 import "./News.scss"
 
 export default function ListNews() {
@@ -72,80 +74,82 @@ export default function ListNews() {
   ];
 
   const getItemsByCategory = async (categoryId: string) => {
-    setLoading(true)
-    const service = new NewsService()
-    const res = await service.getItemsByCategory(categoryId, pagination.pageIndex, pagination.pageSize)
-    setFullItems(res.data.data ?? [])
-    setPagination({...pagination, totalRecords: res.data.total_records})
-    setItems(res.data.data ?? [])
-    setLoading(false)
+    setLoading(true);
+    const service = new NewsService();
+    const res = await service.getItemsByCategory(categoryId, pagination.pageIndex, pagination.pageSize);
+    setFullItems(res.data.data ?? []);
+    setPagination({...pagination, totalRecords: res.data.total_records});
+    setItems(res.data.data ?? []);
+    setLoading(false);
   }
 
   const getAllCategories = async () => {
     setLoading(true)
-    const service = new NewsService()
+    const service = new CategoriesService()
     const res = await service.getAllCategories()
     const categories = res.data?.map((cat: any) => ({
       id: cat.id,
       name: cat.name
     }))
     setCategories(categories)
+    setLoading(false);
     if(res.data && res.data?.length > 0){
-      setSelectedCategory(res.data[0].id)
+      setSelectedCategory(res.data[0].id);
     }
   }
 
   useEffect(() => {
     if(selectedCategory){
-        setPagination({...pagination, pageIndex: 1})
-        getItemsByCategory(selectedCategory)
+        setPagination({...pagination, pageIndex: 1});
+        getItemsByCategory(selectedCategory);
     }
   }, [selectedCategory]);
 
   useEffect(() => {
     if(selectedCategory){
-        getItemsByCategory(selectedCategory)
+        getItemsByCategory(selectedCategory);
     }
   }, [pagination.pageIndex]);
 
   const openFormDialog = (item: Item | null) => {
-     setSelectedItem(item)
-     setOpenForm(true)
+     setSelectedItem(item);
+     setOpenForm(true);
   }
 
   const cancelFormDialog = () => {
-    setSelectedItem(null)
-    setOpenForm(false)
+    setSelectedItem(null);
+    setOpenForm(false);
   }
 
   const openConfirmDeleteDialog = (item: Item) => {
-    setSelectedItem(item)
-    setOpenConfirmDelete(true)
+    setSelectedItem(item);
+    setOpenConfirmDelete(true);
   }
 
   const cancelConfirmDeleteDialog = () => {
-    setSelectedItem(null)
-    setOpenConfirmDelete(false)
+    setSelectedItem(null);
+    setOpenConfirmDelete(false);
   }
 
   const deleteItem = async () => {
      if(selectedItem){
-      setLoading(true)
-      setOpenConfirmDelete(false)
+      setLoading(true);
+      setOpenConfirmDelete(false);
+      setSelectedItem(null);
       const service = new NewsService()
-      const {key, ...deletedItem} = fullItems.filter((item: any) => item.key == selectedItem.key)[0]
-      await service.deleteItem({category_id: selectedCategory, item: deletedItem})
+      const {key, ...deletedItem} = fullItems.filter((item: any) => item.key == selectedItem.key)[0];
+      await service.deleteItem({category_id: selectedCategory, item: deletedItem});
       if(pagination.pageIndex == 1){
-        await getItemsByCategory(selectedCategory)
+        await getItemsByCategory(selectedCategory);
       }else{
-        setPagination({...pagination, pageIndex: 1})
+        setPagination({...pagination, pageIndex: 1});
       }
-      setLoading(false)
+      setLoading(false);
      }
   }
 
   useEffect(() => {
-    getAllCategories()
+    getAllCategories();
   }, []);
 
   return (
@@ -156,13 +160,16 @@ export default function ListNews() {
               }}>
                 {categories.map((cat: any) => <Select.Option key={cat.id} value={cat.id}>{cat.name}</Select.Option>)}
               </Select>
-              <Button onClick={() => openFormDialog(null)}>Create Item</Button>
+              <Button onClick={() => openFormDialog(null)} disabled={categories.length == 0}>Create Item</Button>
           </Space>
-         <Table columns={columns} dataSource={items} pagination={{position: ["bottomCenter"], pageSize: pagination.pageSize, current: pagination.pageIndex, total: pagination.totalRecords, onChange(page, _) {
-              console.log(page)
+         <Table 
+            columns={columns} 
+            dataSource={items} 
+            pagination={{position: ["bottomCenter"], pageSize: pagination.pageSize, current: pagination.pageIndex, total: pagination.totalRecords, onChange(page, _) {
               setPagination({...pagination, pageIndex: page})
-         },}}/>
-         <Modal title="Confirm" visible={openConfirmDelete} onOk={deleteItem} onCancel={cancelConfirmDeleteDialog}>
+            }}}
+         />
+         <Modal title="Confirm" visible={openConfirmDelete} onOk={deleteItem} onCancel={cancelConfirmDeleteDialog} zIndex={0}>
             <p>Are you sure you want to delete?</p>
         </Modal>
         <FormModal 
