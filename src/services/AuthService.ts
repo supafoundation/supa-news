@@ -5,16 +5,4 @@ export default class AuthService {
     const { data: response } = await axios.post(`auth/login`, data);
     return response;
   }
-
-  saveTokenInLocalStorage = (token: string) => {
-    localStorage.setItem("token", token);
-  }
-
-  getTokenInLocalStorage = () => {
-    return localStorage.getItem("token");
-  }
-
-  removeTokenInLocalStorage = () => {
-    localStorage.removeItem("token");
-  }
 }

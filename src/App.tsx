@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import { Spin } from "antd";
 import AuthProvider, { RequireAuth } from "./components/auth/AuthProvider";
 import ListCategories from "./components/categories/ListCategories";
+import ListCellLogs from "./components/cells/ListCellLogs";
 
 interface GlobalData {
   setLoading: (status: boolean) => void
@@ -29,6 +30,7 @@ export default function App() {
                 <Route path="/login" element={<Login />}/>
                 <Route path="/categories" element={<RequireAuth><ListCategories /></RequireAuth>}/>
                 <Route path="/news" element={<RequireAuth><ListNews /></RequireAuth>}/>
+                <Route path="/cells" element={<RequireAuth><ListCellLogs /></RequireAuth>}/>
             </Routes>
           </BrowserRouter>
         </context.Provider>

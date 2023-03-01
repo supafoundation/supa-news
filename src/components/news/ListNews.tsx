@@ -2,11 +2,12 @@ import { Button, Modal, Select, Space, Table } from "antd";
 import type { ColumnsType } from 'antd/es/table';
 import { useContext, useEffect, useState } from "react";
 import { context } from "../../App";
+import { Pagination } from "../../common/Model";
 import CategoriesService from "../../services/CategoriesService";
 import NewsService from "../../services/NewsService";
 import { Category } from "../categories/Model";
 import FormModal from "./FormModal";
-import { Item, Pagination } from "./Model";
+import { Item } from "./Model";
 import "./News.scss"
 
 export default function ListNews() {
@@ -160,7 +161,7 @@ export default function ListNews() {
               }}>
                 {categories.map((cat: any) => <Select.Option key={cat.id} value={cat.id}>{cat.name}</Select.Option>)}
               </Select>
-              <Button onClick={() => openFormDialog(null)} disabled={categories.length == 0}>Create Item</Button>
+              <Button type="primary" onClick={() => openFormDialog(null)} disabled={categories.length == 0}>Create Item</Button>
           </Space>
          <Table 
             columns={columns} 

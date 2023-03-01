@@ -29,9 +29,3 @@ export interface UpdateItemRequest {
     key: string;
     item: Item;
 }
-
-export interface Pagination {
-    totalRecords: number;
-    pageIndex: number;
-    pageSize: number;
-}

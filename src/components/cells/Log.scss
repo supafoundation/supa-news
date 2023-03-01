@@ -1,0 +1,11 @@
+.list-logs-screen{
+    margin: 2%;
+    input{
+        width: 100%;
+    }
+    .ant-modal-body{
+        height: 30vh;
+        overflow-y: auto;
+    }
+}
+

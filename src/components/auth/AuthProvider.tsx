@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import AuthService from "../../services/AuthService";
 
 interface AuthContextType {
     token: any;
@@ -17,24 +16,21 @@ const AuthContext = React.createContext<AuthContextType>({
 });
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-  let [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  let [token, setToken] = useState<string | null>(localStorage.getItem("access_token"));
 
   const signin = (token: string, callback: VoidFunction) => {
-      const service = new AuthService()
-      service.saveTokenInLocalStorage(token)
+      localStorage.setItem("access_token", token);
       setToken(token)
       callback()
   }
 
   const signout = (callback: VoidFunction) => {
-    const service = new AuthService()
-    service.removeTokenInLocalStorage()
+    localStorage.removeItem("access_token");
     callback()
   };
 
   const checkToken = (callback: VoidFunction) => {
-    const service = new AuthService()
-    const token = service.getTokenInLocalStorage()
+    const token = localStorage.getItem("access_token");
     setToken(token)
     if(token){
       callback()

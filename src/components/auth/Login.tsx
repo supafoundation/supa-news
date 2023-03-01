@@ -27,7 +27,10 @@ export default function Login() {
     const accounts = await library.listAccounts();
     setProvider(provider);
     setLibrary(library);
-    if (accounts) setAccount(accounts[0]);
+    if (accounts) {
+      setAccount(accounts[0]);
+      localStorage.setItem("wallet_address", accounts[0]);
+    };
   };
 
   const login = async () => {
@@ -46,8 +49,9 @@ export default function Login() {
     const service = new AuthService()
     const res = await service.login(data)
     if(res.code == 200){
-      service.saveTokenInLocalStorage(res.data.token)
-      auth.signin(res.data.token, () => {
+      localStorage.setItem("access_token", res.data.web_token);
+      localStorage.setItem("refresh_token", res.data.refresh_token);
+      auth.signin(res.data.web_token, () => {
         navigate("/news")
       });
     }
