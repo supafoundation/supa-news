@@ -1,4 +1,4 @@
-export interface CellLog {
+export interface SparkLog {
     _id: string;
     wallet_address: string;
     added_amount: number;
@@ -9,7 +9,7 @@ export interface CellLog {
     created_at: string;
 }
 
-export interface SearchCellLog {
+export interface SearchSparkLog {
    keyword: string;
    from_date: [string, string] | string;
    to_date: [string, string] | string;

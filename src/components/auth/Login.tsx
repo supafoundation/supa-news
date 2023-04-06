@@ -35,7 +35,7 @@ export default function Login() {
 
   const login = async () => {
     if (!library) return;
-    const message = `{timestamp:${new Date().getTime()},domain:supacharge.network}`;
+    const message = `{timestamp:${new Date().getTime()},domain:wagmi.im}`;
     const signature = await library.provider.request({
       method: "personal_sign",
       params: [message, account]

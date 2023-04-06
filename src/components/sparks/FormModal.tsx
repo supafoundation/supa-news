@@ -23,10 +23,10 @@ export default function FormModal(props: FormModalProps) {
         const user = users.find(user => user.nick_name === values.nick_name);
         const data = {wallet_address: user?.wallet_address, amount: parseFloat(values.amount)};
         const service = new SupaChargeService();
-        await service.addCells(data);
+        await service.addSparks(data);
         reloadList();
         closeForm();
-      };
+    };
 
     const closeForm = () => {
         cancel();
@@ -59,7 +59,7 @@ export default function FormModal(props: FormModalProps) {
     return (
         <Modal 
            zIndex={0}
-           title={"Add Cells"} 
+           title={"Add Spacks"} 
            open={openForm} 
            onOk={() => form.submit()} 
            onCancel={closeForm}

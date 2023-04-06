@@ -10,6 +10,9 @@ import { Spin } from "antd";
 import AuthProvider, { RequireAuth } from "./components/auth/AuthProvider";
 import ListCategories from "./components/categories/ListCategories";
 import ListCellLogs from "./components/cells/ListCellLogs";
+import ListSparkLogs from "./components/sparks/ListSparkLogs";
+import ListUsers from "./components/users/ListUsers";
+import "./main.scss"
 
 interface GlobalData {
   setLoading: (status: boolean) => void
@@ -31,6 +34,8 @@ export default function App() {
                 <Route path="/categories" element={<RequireAuth><ListCategories /></RequireAuth>}/>
                 <Route path="/news" element={<RequireAuth><ListNews /></RequireAuth>}/>
                 <Route path="/cells" element={<RequireAuth><ListCellLogs /></RequireAuth>}/>
+                <Route path="/sparks" element={<RequireAuth><ListSparkLogs /></RequireAuth>}/>
+                <Route path="/users" element={<RequireAuth><ListUsers /></RequireAuth>}/>
             </Routes>
           </BrowserRouter>
         </context.Provider>

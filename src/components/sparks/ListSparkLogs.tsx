@@ -2,28 +2,28 @@ import { Button, DatePicker, Input, Space, Table } from "antd";
 import type { ColumnsType } from 'antd/es/table';
 import { useContext, useEffect, useState } from "react";
 import { context } from "../../App";
-import { CellLog } from "./Model";
+import { SparkLog } from "./Model";
 import FormModal from "./FormModal";
 import LogService from "../../services/LogService";
 import { Pagination } from "../../common/Model";
 import moment from 'moment';
 import { DatePickerProps, RangePickerProps } from "antd/lib/date-picker";
 
-export default function ListCellLogs() {
+export default function ListSparkLogs() {
   const {setLoading} = useContext(context)
   const [keyword, setKeyword] = useState<string>("")
-  const [logs, setLogs] = useState<CellLog[]>([])
+  const [logs, setLogs] = useState<SparkLog[]>([])
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [pagination, setPagination] = useState<Pagination>({pageIndex: 1, pageSize: 10, totalRecords: 0});
   const [fromDate, setFromDate] = useState<[string, string] | string>("")
   const [toDate, setToDate] = useState<[string, string] | string>("")
   
-  const columns: ColumnsType<CellLog> = [
+  const columns: ColumnsType<SparkLog> = [
     {
       title: 'Time',
       dataIndex: 'created_at',
       key: 'created_at',
-      render: (_, log: CellLog) => (
+      render: (_, log: SparkLog) => (
         <Space size="middle">
            {moment(log.created_at).format('MMMM Do YYYY, h:mm:ss a')}
         </Space>
@@ -33,7 +33,7 @@ export default function ListCellLogs() {
       title: 'Reason',
       dataIndex: 'Reason',
       key: 'reason',
-      render: (_, log: CellLog) => (
+      render: (_, log: SparkLog) => (
         <Space size="middle">
            {getPlainReason(log.reason)}
         </Space>
@@ -43,7 +43,7 @@ export default function ListCellLogs() {
       title: 'Added Amount',
       dataIndex: 'added_amount',
       key: 'added_amount',
-      render: (_, log: CellLog) => (
+      render: (_, log: SparkLog) => (
         <Space size="middle">
            {log.added_amount.toLocaleString("en-US")}
         </Space>
@@ -53,7 +53,7 @@ export default function ListCellLogs() {
       title: 'Deducted Amount',
       dataIndex: 'deducted_amount',
       key: 'deducted_amount',
-      render: (_, log: CellLog) => (
+      render: (_, log: SparkLog) => (
         <Space size="middle">
            {log.deducted_amount.toLocaleString("en-US")}
         </Space>
@@ -63,7 +63,7 @@ export default function ListCellLogs() {
       title: 'Balance Before',
       dataIndex: 'before_balance',
       key: 'before_balance',
-      render: (_, log: CellLog) => (
+      render: (_, log: SparkLog) => (
         <Space size="middle">
            {log.before_balance.toLocaleString("en-US")}
         </Space>
@@ -73,7 +73,7 @@ export default function ListCellLogs() {
       title: 'Balance After',
       dataIndex: 'after_balance',
       key: 'after_balance',
-      render: (_, log: CellLog) => (
+      render: (_, log: SparkLog) => (
         <Space size="middle">
            {log.after_balance.toLocaleString("en-US")}
         </Space>
@@ -83,21 +83,16 @@ export default function ListCellLogs() {
   const getPlainReason = (reason: number): string => {
     let re = "";
      switch(reason){
-      case 1: re = "IRONSOURCE"; break;
-      case 2: re = "CHAT_DEDUCTION"; break;
-      case 3: re = "REGISTER"; break;
-      case 4: re = "PURCHASE"; break;
-      case 5: re = "REFER"; break;
-      case 6: re = "REFER_TO_CHANNEL"; break;
-      case 7: re = "ADMIN"; break;
+      case 1: re = "DAILY"; break;
+      case 2: re = "ADMIN"; break;
      }
      return re;
   }
 
-  const searchCellLog = async () => {
-    setLoading(true)
+  const searchSparkLog = async () => {
+    setLoading(true);
     const service = new LogService();
-    const res = await service.searchCellLog({
+    const res = await service.searchSparkLog({
       keyword: keyword,
       from_date: fromDate,
       to_date: toDate,
@@ -132,7 +127,7 @@ export default function ListCellLogs() {
   };
 
   useEffect(() => {
-    searchCellLog();
+    searchSparkLog();
   }, [pagination.pageIndex]);
 
   return (
@@ -143,12 +138,12 @@ export default function ListCellLogs() {
                 allowClear 
                 placeholder="Wallet address or nick name" 
                 onChange={(e) => setKeyword(e.target.value)}
-                onPressEnter={() => searchCellLog()}
+                onPressEnter={() => searchSparkLog()}
               />
               <DatePicker placeholder="From date" onChange={onChangeFromDate} />
               <DatePicker placeholder="To date" onChange={onChangeToDate} />
-              <Button type="primary" onClick={() => searchCellLog()}>Search</Button>
-              <Button type="primary" onClick={() => openFormDialog()}>Add Cell</Button>
+              <Button type="primary" onClick={() => searchSparkLog()}>Search</Button>
+              <Button type="primary" onClick={() => openFormDialog()}>Add Spack</Button>
           </Space>
          <Table 
            rowKey="_id"
@@ -163,7 +158,7 @@ export default function ListCellLogs() {
           cancel={cancelFormDialog}
           reloadList={() => {
             setPagination({...pagination, pageIndex: 1});
-            searchCellLog();
+            searchSparkLog();
           }}
         />
     </div>
