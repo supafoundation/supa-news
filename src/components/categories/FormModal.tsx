@@ -44,7 +44,7 @@ export default function FormModal(props: FormModalProps) {
         <Modal 
            zIndex={0}
            title={data ? "Edit" : "Create"} 
-           visible={openForm} 
+           open={openForm} 
            onOk={() => form.submit()} 
            onCancel={closeForm}
            afterClose={closeForm}

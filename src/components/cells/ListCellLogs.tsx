@@ -31,7 +31,7 @@ export default function ListCellLogs() {
     },
     {
       title: 'Reason',
-      dataIndex: 'Reason',
+      dataIndex: 'reason',
       key: 'reason',
       render: (_, log: CellLog) => (
         <Space size="middle">

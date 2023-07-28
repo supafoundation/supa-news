@@ -83,7 +83,7 @@ export default function ListCategories() {
               <Button onClick={() => openFormDialog(null)}>Create Category</Button>
           </Space>
          <Table columns={columns} dataSource={categories}/>
-         <Modal title="Confirm" visible={openConfirmDelete} onOk={deleteCategory} onCancel={cancelConfirmDeleteDialog} zIndex={0}>
+         <Modal title="Confirm" open={openConfirmDelete} onOk={deleteCategory} onCancel={cancelConfirmDeleteDialog} zIndex={0}>
             <p>Are you sure you want to delete?</p>
         </Modal>
         <FormModal 

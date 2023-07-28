@@ -170,7 +170,7 @@ export default function ListNews() {
               setPagination({...pagination, pageIndex: page})
             }}}
          />
-         <Modal title="Confirm" visible={openConfirmDelete} onOk={deleteItem} onCancel={cancelConfirmDeleteDialog} zIndex={0}>
+         <Modal title="Confirm" open={openConfirmDelete} onOk={deleteItem} onCancel={cancelConfirmDeleteDialog} zIndex={0}>
             <p>Are you sure you want to delete?</p>
         </Modal>
         <FormModal 

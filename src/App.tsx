@@ -13,6 +13,7 @@ import ListCellLogs from "./components/cells/ListCellLogs";
 import ListSparkLogs from "./components/sparks/ListSparkLogs";
 import ListUsers from "./components/users/ListUsers";
 import "./main.scss"
+import ListLotteryConfigs from "./components/lottery/ListLotteries";
 
 interface GlobalData {
   setLoading: (status: boolean) => void
@@ -36,6 +37,7 @@ export default function App() {
                 <Route path="/cells" element={<RequireAuth><ListCellLogs /></RequireAuth>}/>
                 <Route path="/sparks" element={<RequireAuth><ListSparkLogs /></RequireAuth>}/>
                 <Route path="/users" element={<RequireAuth><ListUsers /></RequireAuth>}/>
+                <Route path="/lottery-config" element={<RequireAuth><ListLotteryConfigs /></RequireAuth>}/>
             </Routes>
           </BrowserRouter>
         </context.Provider>

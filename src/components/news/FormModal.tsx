@@ -60,7 +60,7 @@ export default function FormModal(props: FormModalProps) {
            zIndex={0}
            style={{ top: 20 }}
            title={data?.key ? "Edit" : "Create"} 
-           visible={openForm} 
+           open={openForm} 
            onOk={() => form.submit()} 
            onCancel={closeForm}
            afterClose={closeForm}
