@@ -16,4 +16,9 @@ export default class LotteryService {
     const { data: response } = await axios.delete(`/lottery/deleteconfig`, {data: {channel_id: channelID}});
     return response;
   }
+
+  spin = async (channelID: string) => {
+    const { data: response } = await axios.post(`/lottery/spin`, {channel_id: channelID});
+    return response;
+  }
 }

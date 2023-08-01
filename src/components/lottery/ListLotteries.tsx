@@ -4,16 +4,21 @@ import { useContext, useEffect, useState } from "react";
 import { context } from "../../App";
 import { LotteryConfig } from "./Model";
 import "./Lottery.scss"
-import FormModal from "./FormModal";
+import EditFormModal from "./EditFormModal";
 import LotteryService from "../../services/LotteryService";
 import moment from 'moment';
+import NotificationModal from "./NotificationModal";
+import { User } from "../../common/Model";
 
 export default function ListLotteryConfigs() {
   const {setLoading} = useContext(context)
   const [lotteryConfigs, setLotteryConfigs] = useState<LotteryConfig[]>([]);
   const [selectedConfig, setSelectedConfig] = useState<LotteryConfig | undefined>();
   const [openConfirmDelete, setOpenConfirmDelete] = useState<boolean>(false);
-  const [openForm, setOpenForm] = useState<boolean>(false);
+  const [openEditForm, setOpenEditForm] = useState<boolean>(false);
+  const [openNotification, setOpenNotification] = useState<boolean>(false);
+  const [winners, setWinners] = useState<User[]>([]);
+  const [spinLoading, setSpinLoading] = useState<boolean>(false);
 
   const columns: ColumnsType<LotteryConfig> = [
     {
@@ -37,6 +42,16 @@ export default function ListLotteryConfigs() {
       key: 'max',
     },
     {
+      title: 'Limit',
+      dataIndex: 'limit',
+      key: 'limit',
+    },
+    {
+      title: 'Number Of Winners',
+      dataIndex: 'number_of_winners',
+      key: 'number_of_winners',
+    },
+    {
       title: 'Start Date',
       dataIndex: 'start_timestamp',
       key: 'start_timestamp',
@@ -57,11 +72,26 @@ export default function ListLotteryConfigs() {
       ),
     },
     {
+      title: 'Spin',
+      key: 'spin',
+      render: (_, lot: LotteryConfig) => (
+        <Space size="middle">
+          <Button type="primary" size="middle" loading={spinLoading} onClick={() => {
+              if(!spinLoading){
+                spinLottery(lot.channel_id)
+              }
+          }}>
+            Spin
+          </Button>
+        </Space>
+      ),
+    },
+    {
       title: 'Action',
       key: 'action',
       render: (_, lot: LotteryConfig) => (
         <Space size="middle">
-          <a href="#!" onClick={() => openFormDialog(lot)}>Edit</a>
+          <a href="#!" onClick={() => openEditFormDialog(lot)}>Edit</a>
           <a href="#!" onClick={() => openConfirmDeleteDialog(lot)}>Delete</a>
         </Space>
       ),
@@ -78,14 +108,14 @@ export default function ListLotteryConfigs() {
     setLoading(false);
   }
 
-  const openFormDialog = (lot: LotteryConfig | undefined) => {
+  const openEditFormDialog = (lot: LotteryConfig | undefined) => {
      setSelectedConfig(lot);
-     setOpenForm(true);
+     setOpenEditForm(true);
   }
 
   const cancelFormDialog = () => {
     setSelectedConfig(undefined);
-    setOpenForm(false);
+    setOpenEditForm(false);
   }
 
   const openConfirmDeleteDialog = (lot: LotteryConfig) => {
@@ -107,6 +137,15 @@ export default function ListLotteryConfigs() {
     getAllLotteryConfigs();
   }
 
+  const spinLottery = async (channelID: string) => {
+    setSpinLoading(true);
+    const service = new LotteryService();
+    const res = await service.spin(channelID)
+    setWinners(res.data);
+    setOpenNotification(true);
+    setSpinLoading(false);
+  }
+
   useEffect(() => {
     getAllLotteryConfigs();
   }, []);
@@ -114,18 +153,26 @@ export default function ListLotteryConfigs() {
   return (
     <div className="list-lottery-config-screen">
           <Space style={{ marginBottom: 16 }}>
-              <Button onClick={() => openFormDialog(undefined)}>Create Config</Button>
+              <Button onClick={() => openEditFormDialog(undefined)}>Create Config</Button>
           </Space>
          <Table columns={columns} dataSource={lotteryConfigs}/>
          <Modal title="Confirm" open={openConfirmDelete} onOk={deleteLotteryConfig} onCancel={cancelConfirmDeleteDialog} zIndex={0}>
             <p>Are you sure you want to delete?</p>
         </Modal>
-        <FormModal 
+        <EditFormModal 
            data={selectedConfig} 
-           openForm={openForm} 
+           openForm={openEditForm} 
            cancelFormDialog={cancelFormDialog} 
            reloadList={() => getAllLotteryConfigs()}
-           />
+        />
+        <NotificationModal
+           data={winners}
+           openNotification={openNotification}
+           cancelFormDialog={() => {
+              setWinners([]);
+              setOpenNotification(false);
+           }}
+        />
     </div>
   );
 }

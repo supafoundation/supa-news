@@ -5,14 +5,14 @@ import { LotteryConfig } from "./Model";
 import LotteryService from "../../services/LotteryService";
 import moment from "moment";
 
-interface FormModalProps{
+interface EditFormModalProps{
     data: LotteryConfig | undefined;
     openForm: boolean;
     reloadList: () => void;
     cancelFormDialog: () => void;
 }
 
-export default function FormModal(props: FormModalProps) {
+export default function EditFormModal(props: EditFormModalProps) {
     const {setLoading} = useContext(context)
     const {data, openForm, cancelFormDialog, reloadList} = props
     const [form] = Form.useForm();
@@ -23,6 +23,8 @@ export default function FormModal(props: FormModalProps) {
         values.end_timestamp = parseFloat(values.end_timestamp.format("X"));
         values.min = parseFloat(values.min);
         values.max = parseFloat(values.max);
+        values.limit = parseFloat(values.limit);
+        values.number_of_winners = parseFloat(values.number_of_winners);
         const {key, ...rest} = values;
         const service = new LotteryService;
         await service.saveConfig(rest);
@@ -59,7 +61,7 @@ export default function FormModal(props: FormModalProps) {
             <Form
                 form={form}
                 name="basic"
-                labelCol={{ span: 4 }}
+                labelCol={{ span: 6 }}
                 onFinish={onFinish}
                 autoComplete="off"
                 >
@@ -83,6 +85,20 @@ export default function FormModal(props: FormModalProps) {
                     rules={[{ required: true, message: 'Max is required!' }]}
                 >
                     <Input type="number" value={data?.max ?? ""}/>
+                </Form.Item>
+                <Form.Item
+                    label="Limit"
+                    name="limit"
+                    rules={[{ required: true, message: 'Limit is required!' }]}
+                >
+                    <Input type="number" value={data?.limit ?? ""}/>
+                </Form.Item>
+                <Form.Item
+                    label="Number Of Winners"
+                    name="number_of_winners"
+                    rules={[{ required: true, message: 'Number Of Winners is required!' }]}
+                >
+                    <Input type="number" value={data?.number_of_winners ?? ""}/>
                 </Form.Item>
                 <Form.Item
                     label="Start Date"
