@@ -14,6 +14,7 @@ import ListSparkLogs from "./components/sparks/ListSparkLogs";
 import ListUsers from "./components/users/ListUsers";
 import "./main.scss"
 import ListLotteryConfigs from "./components/lottery/ListLotteries";
+import ListTransLogs from "./components/trans/ListTransLogs";
 
 interface GlobalData {
   setLoading: (status: boolean) => void
@@ -38,6 +39,7 @@ export default function App() {
                 <Route path="/sparks" element={<RequireAuth><ListSparkLogs /></RequireAuth>}/>
                 <Route path="/users" element={<RequireAuth><ListUsers /></RequireAuth>}/>
                 <Route path="/lottery-config" element={<RequireAuth><ListLotteryConfigs /></RequireAuth>}/>
+                <Route path="/trans-logs" element={<RequireAuth><ListTransLogs /></RequireAuth>}/>
             </Routes>
           </BrowserRouter>
         </context.Provider>
