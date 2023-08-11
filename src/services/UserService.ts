@@ -15,4 +15,9 @@ export default class UserService {
     const { data: response } = await axios.put(`/users/unlockuser`, data);
     return response;
   }
+
+  getTopRefer = async (pageIndex: number, pageSize: number) => {
+    const { data: response } = await axios.get(`/users/gettoprefer?page_index=${pageIndex}&page_size=${pageSize}`);
+    return response;
+  }
 }

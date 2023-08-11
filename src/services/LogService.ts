@@ -1,6 +1,6 @@
 import axios from "axios";
 import { SearchCellLog } from "../components/cells/Model";
-import { SearchSparkLog } from "../components/sparks/Model";
+import { SearchSparkLog } from "../components/spark-log/Model";
 
 export default class LogService {
   searchCellLog = async (data: SearchCellLog) => {

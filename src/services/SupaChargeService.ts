@@ -15,4 +15,9 @@ export default class SupaChargeService {
     const { data: response } = await axios.get(`/supacharges/searchtranslogs?keyword=${keyword}&from_date=${fromDate}&to_date=${toDate}&status=${status}&page_index=${pageIndex}&page_size=${pageSize}`);
     return response;
   }
+
+  getTopSparkBalance = async (pageIndex: number, pageSize: number) => {
+    const { data: response } = await axios.get(`/supacharges/gettopsparkbalance?page_index=${pageIndex}&page_size=${pageSize}`);
+    return response;
+  }
 }

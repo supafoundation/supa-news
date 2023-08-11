@@ -10,11 +10,13 @@ import { Spin } from "antd";
 import AuthProvider, { RequireAuth } from "./components/auth/AuthProvider";
 import ListCategories from "./components/categories/ListCategories";
 import ListCellLogs from "./components/cells/ListCellLogs";
-import ListSparkLogs from "./components/sparks/ListSparkLogs";
+import ListSparkLogs from "./components/spark-log/ListSparkLogs";
 import ListUsers from "./components/users/ListUsers";
 import "./main.scss"
 import ListLotteryConfigs from "./components/lottery/ListLotteries";
 import ListTransLogs from "./components/trans/ListTransLogs";
+import ListTopRefer from "./components/user-refer/ListTopRefer";
+import ListTopSparkBalance from "./components/spark-balance/ListTopSparkBalance";
 
 interface GlobalData {
   setLoading: (status: boolean) => void
@@ -40,6 +42,8 @@ export default function App() {
                 <Route path="/users" element={<RequireAuth><ListUsers /></RequireAuth>}/>
                 <Route path="/lottery-config" element={<RequireAuth><ListLotteryConfigs /></RequireAuth>}/>
                 <Route path="/trans-logs" element={<RequireAuth><ListTransLogs /></RequireAuth>}/>
+                <Route path="/top-balance" element={<RequireAuth><ListTopSparkBalance /></RequireAuth>}/>
+                <Route path="/top-refer" element={<RequireAuth><ListTopRefer /></RequireAuth>}/>
             </Routes>
           </BrowserRouter>
         </context.Provider>
