@@ -35,7 +35,7 @@ export default function Login() {
 
   const login = async () => {
     if (!library) return;
-    const message = `{timestamp:${new Date().getTime()},domain:wagmi.im}`;
+    const message = `{timestamp:${new Date().getTime()},domain:chainnels.com}`;
     const signature = await library.provider.request({
       method: "personal_sign",
       params: [message, account]
